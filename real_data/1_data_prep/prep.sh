@@ -27,7 +27,7 @@ bcftools index SGDP_aDNA_sub_chr${chr}.vcf.gz
 #2. Take the GLIMPSE vcf that has genotype imputation posteriors and set any genotype with posterior <= 0.8 to missing. Then extract BP positions where more than 2% of samples have a missing genotype
 bcftools view -S samples_aDNA.txt --force-samples --max-alleles 2 --exclude-types indels ${aDNA_vcf_with_GP} | bcftools +setGT -- -t q -n . -i'SMPL_MAX(FORMAT/GP)<=0.8' | bcftools annotate -x FORMAT | bcftools view -i "F_MISSING > 0.02" | bcftools query -f "%CHROM\t%POS\n" > excl_0.02_chr${chr}.txt
 
-#set sites in excl_0.02 to missing in the genomic mask
+#set sites in excl_0.02 to missing in the genomic mask. Genomic mask available from e.g., https://www.dropbox.com/scl/fi/ocvr7m00f4jhfcytew4fy/Relate_input_files.tar?rlkey=j1kuqbo2hgvgfwmudwao0v0wv&st=eea0niqm&dl=0
 Rscript compile_mask.R ${chr}
 gzip -f ./StrictMask_0.02_chr${chr}.fa
 

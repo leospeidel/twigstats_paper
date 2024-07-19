@@ -30,7 +30,7 @@ length = {1:2.49e8, 2:2.42e8, 3:1.98e8, 4:1.90e8, 5:1.82e8, 6:1.71e8, 7:1.59e8, 
 
 def run_sim(chrom, length, mutation_rate, recombination_rate, sample_size,  filename, seed, alpha):
 
-  infile = "/camp/lab/skoglundp/working/leo/datasets/human_genome/recomb_maps/HapmapII/genetic_map_GRCh37_chr" + str(chrom) + ".txt"
+  infile = "../../recomb_rates/HapmapII/genetic_map_GRCh37_chr" + str(chrom) + ".txt.gz"
   recomb_map = msprime.RateMap.read_hapmap(infile)
 
   N_A = 50000*2
