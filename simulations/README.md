@@ -7,7 +7,7 @@ R packages:
 - admixtools2 (https://uqrmaie1.github.io/admixtools/articles/admixtools.html)
 
 Python3 libraries
-- numpy
+- numpy (https://numpy.org/)
 - msprime (https://tskit.dev/msprime/docs/stable/intro.html)
 
 Other software
