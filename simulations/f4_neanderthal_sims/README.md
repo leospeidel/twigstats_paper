@@ -1,4 +1,4 @@
-# Simulations used in the Twigstats paper
+# Neanderthal simulations
 
 ## Two simulations:
 
