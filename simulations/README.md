@@ -14,4 +14,5 @@ Other software
 - Relate
 - relate_lib
 - plink2
+- Shapeit4
 
