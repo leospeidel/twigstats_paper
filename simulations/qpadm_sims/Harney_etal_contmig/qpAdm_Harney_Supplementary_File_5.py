@@ -18,7 +18,7 @@ seed = int(sys.argv[1])
 migration_rate = float(sys.argv[3])
 
 #Simulation parameters
-mutation_rate = 1.5e-8
+mutation_rate = 1.25e-8
 recombination_rate = 1e-8
 sample_size = 20
 #sample_size = 2
@@ -29,7 +29,7 @@ length = {1:247185273, 2:242739670, 3:199358925, 4:191262559, 5:180648416, 6:170
 
 def run_sim(chrom, mutation_rate, sample_size, length, filename, seed, migration_rate, recombination_rate):
 
-    infile = "../../recomb_rates/HapmapII/genetic_map_GRCh37_chr" + str(chrom) + ".txt.gz"
+    infile = "/camp/lab/skoglundp/working/leo/datasets/human_genome/recomb_maps/HapmapII/genetic_map_GRCh37_chr" + str(chrom) + ".txt"
     recomb_map = msprime.RateMap.read_hapmap(infile)
     
     m = migration_rate
@@ -39,31 +39,39 @@ def run_sim(chrom, mutation_rate, sample_size, length, filename, seed, migration
 
     # Allocate the initial sample.
     population_configurations = [
-        msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
-                msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
-                msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
-                msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
-                msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
-                msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
-                msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
-                msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
-        msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N)
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N),
+            msprime.PopulationConfiguration(sample_size=sample_size, initial_size=N)
     ]
 
 
     migration_matrix = [
-        [0, m, 0, 0, 0, 0, 0, 0, 0],
-        [m, 0, m, 0, 0, 0, 0, 0, 0],
-        [0, m, 0, m, 0, 0, 0, 0, 0],
-        [0, 0, m, 0, m, 0, 0, 0, 0],
-        [0, 0, 0, m, 0, m, 0, 0, 0],
-        [0, 0, 0, 0, m, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+            [0, m, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [m, 0, m, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, m, 0, m, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, m, 0, m, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, m, 0, m, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, m, 0, m, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, m, 0, m, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, m, 0, m, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, m, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 
     demographic_events=[
+
+                msprime.MassMigration(time = T/2, source = 4, destination = 1, proportion = 0),
 
                 msprime.MassMigration(
                         time = T, source = 1, destination = 0, proportion = 1.0),
@@ -75,6 +83,14 @@ def run_sim(chrom, mutation_rate, sample_size, length, filename, seed, migration
                         time = T, source = 4, destination = 0, proportion = 1.0),
                 msprime.MassMigration(
                         time = T, source = 5, destination = 0, proportion = 1.0),
+                msprime.MassMigration(
+                        time = T, source = 6, destination = 0, proportion = 1.0),
+                msprime.MassMigration(
+                        time = T, source = 7, destination = 0, proportion = 1.0),
+                msprime.MassMigration(
+                        time = T, source = 8, destination = 0, proportion = 1.0),
+                msprime.MassMigration(
+                        time = T, source = 9, destination = 0, proportion = 1.0),
 
 
                 msprime.PopulationParametersChange(
@@ -89,30 +105,32 @@ def run_sim(chrom, mutation_rate, sample_size, length, filename, seed, migration
                         time = T, initial_size = 1,  growth_rate = 0, population_id = 4),
                 msprime.PopulationParametersChange(
                         time = T, initial_size = 1,  growth_rate = 0, population_id = 5),
+                msprime.PopulationParametersChange(
+                        time = T, initial_size = 1,  growth_rate = 0, population_id = 6),
+                msprime.PopulationParametersChange(
+                        time = T, initial_size = 1,  growth_rate = 0, population_id = 7),
+                msprime.PopulationParametersChange(
+                        time = T, initial_size = 1,  growth_rate = 0, population_id = 8),
 
                 msprime.MigrationRateChange(time=T, rate=0),
 
 
                 msprime.MassMigration(
-                        time = T*1.5, source = 6, destination = 0, proportion = 1.0),
+                        time = T*1.5, source = 9, destination = 0, proportion = 1.0),
                 msprime.PopulationParametersChange(
-                        time = T*1.5, initial_size = 1,  growth_rate = 0, population_id = 6),
+                        time = T*1.5, initial_size = 1,  growth_rate = 0, population_id = 9),
 
 
                 msprime.MassMigration(
-                        time = T*1.75, source = 7, destination = 0, proportion = 1.0),
+                        time = T*1.75, source = 10, destination = 0, proportion = 1.0),
                 msprime.PopulationParametersChange(
-                        time = T*1.75, initial_size = 1,  growth_rate = 0, population_id = 7),
+                        time = T*1.75, initial_size = 1,  growth_rate = 0, population_id = 10),
 
 
                 msprime.MassMigration(
-                        time = T*2, source = 8, destination = 0, proportion = 1.0),
+                        time = T*2, source = 11, destination = 0, proportion = 1.0),
                 msprime.PopulationParametersChange(
-                        time = T*2, initial_size = 1,  growth_rate = 0, population_id = 8)]
-
-
-
-
+                        time = T*2, initial_size = 1,  growth_rate = 0, population_id = 11)]
 
 ###    RUN DEMOGRAPHY DEBUGGER
 
@@ -129,9 +147,9 @@ def run_sim(chrom, mutation_rate, sample_size, length, filename, seed, migration
     #length = 100000000
 
     dp = msprime.simulate(
-                population_configurations=population_configurations,
+        population_configurations=population_configurations,
         demographic_events=demographic_events,
-                migration_matrix=migration_matrix,
+        migration_matrix=migration_matrix,
         random_seed = seed,
         recombination_map = recomb_map,
         #recombination_rate = recombination_rate,
@@ -139,13 +157,14 @@ def run_sim(chrom, mutation_rate, sample_size, length, filename, seed, migration
         mutation_rate = mutation_rate)
 
     #generate the output eigenstrat files
-    geno = open('%s_chr%s.geno' %(filename, chrom), 'w')
-    snp = open('%s_chr%s.snp' %(filename, chrom), 'w')
-    for variant in dp.variants(as_bytes=True):    
-        geno.write('%s\n' %variant.genotypes)
-        snp.write('%s    %s    %s    %s    0    1\n' %(variant.index, chrom, variant.position/float(length), variant.position))
-    geno.close()
-    snp.close()
+    #geno = open('%s_chr%s.geno' %(filename, chrom), 'wb')
+    #snp = open('%s_chr%s.snp' %(filename, chrom), 'w')
+    #for variant in dp.variants():    
+    #    #geno.write('%s\n' %variant.genotypes)
+    #    geno.write(('%s\n' % variant.genotypes).encode('utf-8'))
+    #    snp.write('%s    %s    %s    %s    0    1\n' %(variant.index, chrom, variant.position/float(length), variant.position))
+    #geno.close()
+    #snp.close()
 
     totalsamplesize = dp.get_sample_size()
     ind = open('%s_chr%s.ind' %(filename, chrom), 'w')
@@ -153,18 +172,18 @@ def run_sim(chrom, mutation_rate, sample_size, length, filename, seed, migration
     for row in range(0, totalsamplesize):
         if row % sample_size == 0:
             pop += 1            
-        ind.write('%s    U    %s\n' %(row, pop))
+        ind.write('%s    U    p%s\n' %(row, pop))
     ind.close()
 
     fp = open('%s_chr%s.poplabels' %(filename, chrom), 'w')
     fp.write("ID POP GROUP SEX\n")
     samples_of_interest = []
-    for p in range(0,9):
+    for p in range(0,12):
         sams = dp.samples( population = p )
         k = 0
         for s in sams:
             if k % 2 == 0:
-                fp.write( "tsk_" + str(s) + " " + str(p) + " " + str(p) + " 0\n" )
+                fp.write( "tsk_" + str(s) + " p" + str(p) + " p" + str(p) + " 1\n" )
         samples_of_interest.extend(sams)
     dp = dp.simplify(samples_of_interest)
 

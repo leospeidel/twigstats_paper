@@ -6,23 +6,26 @@ v <- commandArgs(trailingOnly = T)[2]
 ad <- commandArgs(trailingOnly = T)[1]
 chr <- 1
 
-left = c('0','1','3','4','5')
-right = c('6','7','8')
-target = '2'
-
-pops <- sort(c(left, right, target))
+left = c('p0','p1','p2','p3','p4','p5','p6','p7','p8')
+right = c('p11','p10','p9')
+targets = left
 
 df <- data.frame()
 
 run_qpadm <- function(f2_blocks, mtype, mcutoff){
 
   df <- data.frame()
-  for(l1 in left){
-    for(l2 in left){
-      if(l1 > l2){
-        right_focus <- c(right, left[!left %in% c(l1,l2)])
-        qpres <- qpadm(f2_blocks, left = c(l1,l2), right = right_focus, target = target)
-        df <- rbind(df, cbind(qpres$weights, pval = qpres$popdrop$p[1], source1 = l1, source2 = l2, type = mtype, cutoff = mcutoff))
+  for(target in targets){
+    left2 <- left[!left %in% target]
+    for(l1 in left2){
+      for(l2 in left2){
+        if(l1 > l2){
+          right_focus <- c(right, left2[!left2 %in% c(target,l1,l2)])
+          print(c(target, l1, l2))
+          print(right_focus)
+          qpres <- qpadm(f2_blocks, left = c(l1,l2), right = right_focus, target = target)
+          df <- rbind(df, cbind(qpres$weights, pval = qpres$popdrop$p[1], target = target, source1 = l1, source2 = l2, type = mtype, cutoff = mcutoff))
+        }
       }
     }
   }
@@ -30,15 +33,13 @@ run_qpadm <- function(f2_blocks, mtype, mcutoff){
 
 }
 
-file_geno <- paste0("./",v,"/std_v",v,"_mig",ad,"_chr",chr)
 file_bed <- paste0("./",v,"/std_v",v,"_mig",ad)
 
-
-if(!file.exists(paste0(file_geno, ".RData"))){
-  f2_blocks <- f2_from_geno(file_geno)
-  save(f2_blocks, file = paste0(file_geno, ".RData"))
+if(!file.exists(paste0(file_bed, ".RData"))){
+  f2_blocks <- f2_from_geno(file_bed)
+  save(f2_blocks, file = paste0(file_bed, ".RData"))
 }
-load(paste0(file_geno, ".RData"))
+load(paste0(file_bed, ".RData"))
 df <- rbind(df, run_qpadm(f2_blocks, "genotypes", "Inf"))
 
 filename <- paste0("./",v,"/relate_std_v",v,"_mig",ad)
@@ -49,7 +50,7 @@ if(!file.exists(paste0(filename, "_Relate.RData"))){
 load(paste0(filename, "_Relate.RData"))
 df <- rbind(df, run_qpadm(f2_blocks, "Relate dated", "Inf"))
 
-for(x in seq(200,3000,200)){
+for(x in c(1000,2000,3000)){
 
   filename <- paste0("./",v,"/relate_std_v",v,"_mig",ad)
   if(!file.exists(paste0(filename,"_t",x, "_Relate.RData"))){
@@ -71,7 +72,7 @@ if(!file.exists(paste0(filename, "_Relate2.RData"))){
 load(paste0(filename, "_Relate2.RData"))
 df <- rbind(df, run_qpadm(f2_blocks, "Relate trees", "Inf"))
 
-for(x in seq(200,3000,200)){
+for(x in c(1000,2000,3000)){
 
   filename <- paste0("./",v,"/relate_std_v",v,"_mig",ad)
   if(!file.exists(paste0(filename,"_t",x, "_Relate2.RData"))){
